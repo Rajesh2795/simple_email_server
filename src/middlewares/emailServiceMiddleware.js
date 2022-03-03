@@ -13,19 +13,19 @@ const isEmailsValid = async function (req, res, next) {
     const {to, from} = req.body;
 
     if (!validator.isEmail(to)) {
-        res.send({error: `Invalid email address: ${to}`});
+        res.status(400).send({error: `Invalid email address: ${to}`});
         return;
     }
 
     if (!validator.isEmail(from)) {
-        res.send({error: `Invalid email address: ${from}`});
+        res.status(400).send({error: `Invalid email address: ${from}`});
         return;
     }
 
     // I am checking both emails because a 'from email' can also be in a bounced emails db.
     const result = await isEmailsBounced(to, from);
     if (result) {
-        res.send({error: "Email is a bounced email"})
+        res.status(400).send({error: "Email is a bounced email"})
         return;
     }
 
@@ -42,7 +42,7 @@ const isEmailExistsInDB = async function (req, res, next) {
     const email_address = req.body.email_address;
     const result = await BouncedEmail.findByEmail(email_address);
     if (result) {
-        res.send({message: "Email already exists"});
+        res.status(400).send({message: "Email already exists"});
         return;
     }
     next();

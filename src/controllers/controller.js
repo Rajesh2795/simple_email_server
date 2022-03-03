@@ -18,7 +18,7 @@ const handleSendEmail = async (req, res) => {
 
     const emailProvider = emailFactoryService.getProvider(emailServiceProviderName, to, from, subject, bodyText, bodyHtml);
     if (!emailProvider) {
-        res.send({error: "An error occurred."})
+        res.status(500).send({error: "An error occurred."})
         return;
     }
 
@@ -46,9 +46,9 @@ const handleBouncedEmail = async (req, res) => {
     try {
         const bouncedEmailID = req.body.email_address;
         const doc = BouncedEmail.create({email: bouncedEmailID});
-        res.send({message: `Successfully stored the bounced email ${bouncedEmailID} in the db.`});
+        res.status(201).send({message: `Successfully stored the bounced email ${bouncedEmailID} in the db.`});
     } catch (e) {
-        res.send({error: `error occurred when stored the bounced email: ${bouncedEmailID}.`});
+        res.status(500).send({error: `error occurred when stored the bounced email: ${bouncedEmailID}.`});
     }
 }
 
